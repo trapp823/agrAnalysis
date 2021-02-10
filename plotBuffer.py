@@ -1,4 +1,11 @@
+'''
+Created Feb 09, 2021
 
+Thomas Rapp
+tsrapp@g.clemson.edu
+
+Summary: buffer original plots in shapefile by a user defined percentage and store as new csv coordinates
+'''
 
 import argparse
 import pandas as pd
