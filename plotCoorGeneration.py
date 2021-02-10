@@ -8,6 +8,12 @@ Originally Created on Jun 27, 2020
 
 @author: Xu
 '''
+'''
+Edited on Feb 2, 2021
+
+Thomas Rapp @ Clemson University
+tsrapp@g.clemson.edu
+'''
 import pandas as pd
 import argparse
 
