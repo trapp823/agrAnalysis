@@ -6,8 +6,9 @@ assistance from: Kevin (Xu) Wang @ Kansas State Univ
 
 Created Feb 8, 2021
 
-Summary: Use shapefile created in QGIS using HTP Geoprocessor plugin to extract
-         plot-by-plot raster data from drone imaging of agricultural research field.
+Summary: Use shapefile created in QGIS using HTP Map Creator plugin to extract
+         plot-by-plot raster data (mean/standard deviation pixel values) from 
+         drone imaging of agricultural research field.
 '''
 
 import argparse
