@@ -43,7 +43,10 @@ with fiona.open(plotShape) as shapes:
 allData = []
 #imgGrey = cv2.imread(srcImage, 0)
 #nzPixels = []
+progressCount = 0
 for i in range(len(plotIDs)):
+    progressCount = progressCount + 1
+    print("working on " + str(progressCount) + "/" + str(len(plotIDs)))
     plotID = str(plotIDs[i]).split("'")[3]
     with rasterio.open(srcImage) as src:
         rawNpPixels, out_transform = mask(src, [geoms[i]], crop=True)
