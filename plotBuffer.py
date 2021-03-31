@@ -38,14 +38,15 @@ ogX3 = ogCoordsRaw.X3.to_list()
 ogY3 = ogCoordsRaw.Y3.to_list()
 ogX4 = ogCoordsRaw.X4.to_list()
 ogY4 = ogCoordsRaw.Y4.to_list()
-print(ogX1[0])
+#print(ogX1[0])
 
 coord1 = [0.0] * 8
 coord2 = [0.0] * 8
-newFile = open(tgt + "\\bufferPlotCoordinates.csv", "wt")
+newFile = open(tgt + "\\bufferPlotCoordinates_" + str(length) + "_"
+               + str(width) + ".csv", "wt")
 writer = csv.writer(newFile, delimiter=',', lineterminator='\n')
 writer.writerow(('Plot_ID', 'X1', 'Y1', 'X2', 'Y2', 'X3', 'Y3', 'X4', 'Y4'))
-for i in range(len(ogX1) - 1):
+for i in range(len(ogX1)):
         coord1[0] = ogX1[i] + (ogX2[i] - ogX1[i]) * 0.005 * length
         coord1[1] = ogY1[i] + (ogY2[i] - ogY1[i]) * 0.005 * length
         coord1[2] = ogX2[i] + (ogX1[i] - ogX2[i]) * 0.005 * length
