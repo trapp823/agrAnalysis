@@ -41,8 +41,8 @@ with fiona.open(plotShape) as shapes:
     plotIDs = [feature["properties"] for feature in shapes]
 
 allData = []
-imgGrey = cv2.imread(srcImage, 0)
-nzPixels = []
+#imgGrey = cv2.imread(srcImage, 0)
+#nzPixels = []
 for i in range(len(plotIDs)):
     plotID = str(plotIDs[i]).split("'")[3]
     with rasterio.open(srcImage) as src:
