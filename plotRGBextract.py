@@ -1,5 +1,5 @@
 '''
-author: Thomas Rapp @ KresovichLab Clemson Univ
+author: Thomas Rapp
         tsrapp@clemson.edu
 assistance from: Kevin (Xu) Wang @ Kansas State Univ
                  Sirjan Sapkota @ Clemson Univ
