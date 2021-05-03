@@ -45,9 +45,10 @@ allData = []
 #nzPixels = []
 progressCount = 0
 for i in range(len(plotIDs)):
-    progressCount = progressCount + 1
-    print("working on " + str(progressCount) + "/" + str(len(plotIDs)))
     plotID = str(plotIDs[i]).split("'")[3]
+    progressCount = progressCount + 1
+    print("working on " + str(progressCount) + "/" + str(len(plotIDs))
+          + " : " + plotID)
     with rasterio.open(srcImage) as src:
         rawNpPixels, out_transform = mask(src, [geoms[i]], crop=True)
     out_meta = src.meta.copy()
@@ -65,13 +66,20 @@ for i in range(len(plotIDs)):
     npBlue = rawNpPixels[2]
     npBlue[npBlue < 0] = 0
 
+    soilCount = 0
+    vegCount = 0
+    nonMask = 0
+
     for x in range(len(npRed)):
         for y in range(len(npRed[x])):
-            if (npBlue[x][y] == 0 | npGreen[x][y] == 0):
+            if (npBlue[x][y] != 0 or npGreen[x][y] != 0 or npRed[x][y] != 0):
+                nonMask = nonMask + 1
+            if (npBlue[x][y] == 0 or npGreen[x][y] == 0):
                 thisBGI = 0
             else:
                 thisBGI = npBlue[x][y] / npGreen[x][y]
             if(thisBGI > 0.65):
+                soilCount = soilCount + 1
                 #rawNpPixels[0][x][y] = 0
                 npRed[x][y] = 0
                 #rawNpPixels[1][x][y] = 0
@@ -89,6 +97,7 @@ for i in range(len(plotIDs)):
         nzGreen = npGreen[np.nonzero(npGreen)]
         greenMean = np.mean(nzGreen)  # /(256*256)
         greenStdDev = np.std(nzGreen)
+        vegCount = len(nzGreen)
 
     if np.count_nonzero(npBlue) > 0:
         nzBlue = npBlue[np.nonzero(npBlue)]
@@ -98,7 +107,15 @@ for i in range(len(plotIDs)):
     #with rasterio.open(tgtFolder+"\\"+plotID+"noSoil.tif", "w", **out_meta) as dest:
        #dest.write(rawNpPixels)
 
+    #print("soil: " + str(soilCount))
+    #print("veg: " + str(vegCount))
+    #print("add: " + str(vegCount + soilCount))
+    #print("total: " + str(nonMask))
+
     # vegetation indices calculations using mean RGB values
+    #canopy cover percent based on ratio of # of green pixels to # of pixels
+    canopy = (vegCount / nonMask) * 100
+
     # brightness index (vegetation cover)
     BI = np.sqrt((pow(redMean, 2) + pow(greenMean, 2) + pow(blueMean, 2) / 3))
 
@@ -132,7 +149,7 @@ for i in range(len(plotIDs)):
               coords[i][0][3][0], coords[i][0][3][1],
               redMean, greenMean, blueMean,
               redStdDev, greenStdDev, blueStdDev,
-              BI, SCI, GLI, NGRDI, SI, HI, VARI, HUE, BGI]
+              BI, SCI, GLI, NGRDI, SI, HI, VARI, HUE, BGI, canopy]
 
     allData.append(csvRow)
 
@@ -145,7 +162,7 @@ try:
                  "brightness", "soil color", "green leaf",
                  "normalized green-red diff", "spectral slope saturation",
                  "primary colors hue", "visible atmospherically resistant",
-                 "overall hue", "blue-green"]
+                 "overall hue", "blue-green", "canopy cover"]
     writer.writerow(csvHeader)
     writer.writerows(allData)
 finally:
